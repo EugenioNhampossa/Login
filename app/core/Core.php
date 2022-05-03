@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 class Core
 {
@@ -11,10 +12,12 @@ class Core
             $action = $urlGet['method'];
         }
 
-        if (isset($urlGet['pages'])) {
-            $controller = ucfirst($urlGet['pages'] . 'Controller');
-        } else {
+        if (isset($urlGet['page'])) {
+            $controller = ucfirst($urlGet['page'] . 'Controller');
+        } else if (isset($_SESSION['loged'])) {
             $controller = 'HomeController';
+        } else {
+            $controller = 'LoginController';
         }
 
 
