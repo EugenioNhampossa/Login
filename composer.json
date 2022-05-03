@@ -1,0 +1,17 @@
+{
+    "name": "eugenio/login",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Eugenio\\Login\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Eugénio Nhampossa",
+            "email": "eugenioanhampossa@gmail.com"
+        }
+    ],
+    "require": {}
+}
