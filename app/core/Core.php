@@ -14,7 +14,9 @@ class Core
 
         if (isset($urlGet['page'])) {
             $controller = ucfirst($urlGet['page'] . 'Controller');
-        } else if (isset($_SESSION['loged'])) {
+        }
+
+        if (isset($_SESSION['loged'])) {
             $controller = 'HomeController';
         } else {
             $controller = 'LoginController';

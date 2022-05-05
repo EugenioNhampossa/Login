@@ -8,6 +8,8 @@ require_once "app/controller/ErrorController.php";
 require_once "app/controller/HomeController.php";
 require_once "app/controller/LoginController.php";
 
+require_once "vendor/autoload.php";
+
 
 $template = file_get_contents('app/template/structure.html');
 
