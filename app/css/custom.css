@@ -2,13 +2,15 @@ body{
     background-image: linear-gradient(to top, #1b1c1d, #3e4c51, #638485, #92bfb2, #d3fbd8);
 }
 
-.textColor{
-    color: #d3fbd8;
+/*Link customization*/
+.linkColor{
+    color: #e79c25;
 }
 
-.buttonPrimaryColor{
-    background-color: #e79c25;
+a:hover{
+    color: #e79c25;
 }
+/*-------------------*/
 
 .middleContainer{
     padding-top: 4%;
