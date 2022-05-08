@@ -1,0 +1,18 @@
+body{
+    background-image: linear-gradient(to top, #1b1c1d, #3e4c51, #638485, #92bfb2, #d3fbd8);
+}
+
+.textColor{
+    color: #d3fbd8;
+}
+
+.buttonPrimaryColor{
+    background-color: #e79c25;
+}
+
+.middleContainer{
+    padding-top: 4%;
+    padding-bottom: 2%;
+}
+
+
