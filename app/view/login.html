@@ -3,37 +3,42 @@
         <div class="ui segments innerContainer">
             <div class="ui center aligned inverted segment">
                 <i class="huge user circle icon"></i>
-                <h3>Login</h3>
-                <p>Don't have an account? <a href="" class="linkColor">Register</a></p>
+                <h3 class="ui header">Login</h3>
+                <p>Don't have an account? <a href="?page=login&method=register" class="linkColor"><b>Register</b></a>
+                </p>
             </div>
             <div class="ui inverted segment">
                 <div class="ui stackable two column grid">
                     <div class="column">
                         <div class="ui clearing inverted segment">
-                            <div class="ui inverted form">
-                                <div class="field">
-                                    <label for="">User Name</label>
-                                    <input type="text" name="" id="">
-                                </div>
-                                <div class="field">
-                                    <label for="">Password</label>
-                                    <input type="password" name="" id="">
-                                </div>
-                                <div class="field">
-                                    <div class="ui checkbox">
-                                        <input type="checkbox" name="" id="">
-                                        <label for="">Show password</label>
+                            <form name="formLogin" action="?page=home" method="POST">
+                                <div class="ui inverted form">
+                                    <div class="field">
+                                        <label for="">User Name</label>
+                                        <input type="text" name="" id="">
+                                    </div>
+                                    <div class="field">
+                                        <label for="">Password</label>
+                                        <input type="password" name="" id="">
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui checkbox">
+                                            <input type="checkbox" name="" id="">
+                                            <label for="">Show password</label>
+                                        </div>
+                                    </div>
+                                    <div class="ui stackable grid">
+                                        <div style="padding-top: 25px;" class="fourteen wide column">
+                                            <a class="linkColor" href="#">
+                                                <h4>Forgot your password?</h4>
+                                            </a>
+                                        </div>
+                                        <div class="two wide column">
+                                            <button class="ui right floated teal button" type="submit">Login</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="field">
-                                    <div class="ui checkbox">
-                                        <input type="checkbox" name="" id="">
-                                        <label for="">I agree with the <a href="" class="linkColor">terms and
-                                                conditions</a></label>
-                                    </div>
-                                </div>
-                                <div class="ui right floated teal button">Login</div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                     <div class="column">

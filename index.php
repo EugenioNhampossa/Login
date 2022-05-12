@@ -2,11 +2,14 @@
 ini_set('display_errors', 1);
 
 require_once "app/core/Core.php";
+require_once "app/model/User.php";
 
 
 require_once "app/controller/ErrorController.php";
 require_once "app/controller/HomeController.php";
 require_once "app/controller/LoginController.php";
+require_once "lib/database/Connection.php";
+
 
 require_once "vendor/autoload.php";
 

@@ -1,5 +1,6 @@
 body{
-    background-image: linear-gradient(to top, #1b1c1d, #3e4c51, #638485, #92bfb2, #d3fbd8);
+    background-color: #ecfbff;
+    background-repeat: no-repeat;
 }
 
 /*Link customization*/
@@ -11,6 +12,16 @@ a:hover{
     color: #e79c25;
 }
 /*-------------------*/
+ 
+/*Alternative login div*/
+@media (min-width: 768px) {
+.ui.grid>.column:not(.row).loginAltenative {
+        padding-top: 100px;
+        ;
+    }
+}
+/*--------------------*/
+
 
 .middleContainer{
     padding-top: 4%;
