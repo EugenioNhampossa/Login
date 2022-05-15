@@ -17,11 +17,9 @@ a:hover{
 @media (min-width: 768px) {
 .ui.grid>.column:not(.row).loginAltenative {
         padding-top: 100px;
-        ;
     }
 }
 /*--------------------*/
-
 
 .middleContainer{
     padding-top: 4%;

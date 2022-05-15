@@ -11,9 +11,8 @@ class ErrorController
             $twig = new \Twig\Environment($loader);
             $template = $twig->load('error.html');
 
-            $parametros = array();
-
-            $conteudo = $template->render();
+            $parameters = array();
+            $conteudo = $template->render($parameters);
 
             echo $conteudo;
         } catch (Exception $e) {

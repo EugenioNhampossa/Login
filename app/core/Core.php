@@ -27,11 +27,22 @@ class Core
             $controller = 'ErrorController';
         }
 
-        $params = array();
-        if (isset($urlGet['id']) && $urlGet != null) {
-            $params = array('id' => $urlGet['id']);
-        }
+        call_user_func_array(array(new $controller, $action), $this->parameters($urlGet));
+    }
 
-        call_user_func_array(array(new $controller, $action), $params);
+    public function parameters($urlGet)
+    {
+        $params = array();
+        if ($urlGet != null) {
+            if (isset($urlGet['id'])) {
+                global $params;
+                $params['id'] = $urlGet['id'];
+            }
+            if (isset($urlGet['email'])) {
+                global $params;
+                $params['email'] = $urlGet['email'];
+            }
+        }
+        return $params;
     }
 }

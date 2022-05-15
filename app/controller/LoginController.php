@@ -1,15 +1,23 @@
 <?php
 
+use \Twig\Loader\FilesystemLoader;
+use \Twig\Environment;
 
 class LoginController
 {
 
+    /**
+     * index
+     * this method prints the login page after replacing
+     * the dinamic area with the login.html content.
+     * @return void
+     */
     public function index()
     {
         try {
 
-            $loader = new \Twig\Loader\FilesystemLoader('app/view');
-            $twig = new \Twig\Environment($loader);
+            $loader = new FilesystemLoader('app/view');
+            $twig = new Environment($loader);
             $template = $twig->load('login.html');
 
             $conteudo = $template->render();
@@ -20,12 +28,18 @@ class LoginController
         }
     }
 
+    /**
+     * register
+     * this method prints the registration page after replacing
+     * the dinamic area with the register.html content.
+     * @return void
+     */
     public function register()
     {
         try {
 
-            $loader = new \Twig\Loader\FilesystemLoader('app/view');
-            $twig = new \Twig\Environment($loader);
+            $loader = new FilesystemLoader('app/view');
+            $twig = new Environment($loader);
             $template = $twig->load('register.html');
 
             $conteudo = $template->render();
@@ -36,11 +50,18 @@ class LoginController
         }
     }
 
+
+    /**
+     * save
+     * this methed calls the create method in the users class that is 
+     * responsable for save the user in the database.
+     * @return void
+     */
     public function save()
     {
         try {
-            if (!User::create($_POST)) {
-                header("Location:?page=login&method=verify");
+            if (User::create($_POST)) {
+                header("Location:?page=login&method=verify&email=" . $_POST['email']);
             } else {
                 header("Location:?page=login&page=register&error");
             }
@@ -49,14 +70,23 @@ class LoginController
         }
     }
 
-    public function verify()
+
+    /**
+     * verify
+     * this method prints the verification page
+     * @return void
+     */
+    public function verify($email)
     {
         try {
-            $loader = new \Twig\Loader\FilesystemLoader('app/view');
-            $twig = new \Twig\Environment($loader);
+            $loader = new FilesystemLoader('app/view');
+            $twig = new Environment($loader);
             $template = $twig->load('verifyEmail.html');
 
-            $conteudo = $template->render();
+            $parameters = array();
+            $parameters['email'] = $email;
+
+            $conteudo = $template->render($parameters);
 
             echo $conteudo;
         } catch (Exception $e) {
@@ -64,14 +94,28 @@ class LoginController
         }
     }
 
+
+    /**
+     * confirm
+     * print the page that confirms the verificarion
+     * @return void
+     */
     public function confirm()
     {
         try {
-            $loader = new \Twig\Loader\FilesystemLoader('app/view');
+
+            $loader = new FilesystemLoader('app/view');
             $twig = new \Twig\Environment($loader);
             $template = $twig->load('confirmVerification.html');
-
-            $conteudo = $template->render();
+            $parameters = array();
+            if (isset($_GET['vkey'])) {
+                if (User::confirm($_GET['vkey'])) {
+                    $parameters['message'] = "Email verifyed";
+                } else {
+                    $parameters['message'] = "Error verifying your email. Try again!";
+                }
+            }
+            $conteudo = $template->render($parameters);
 
             echo $conteudo;
         } catch (Exception $e) {
