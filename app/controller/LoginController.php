@@ -60,13 +60,24 @@ class LoginController
     public function save()
     {
         try {
-            if (User::create($_POST)) {
+            $resp = User::create($_POST);
+
+            if ($resp === "exists") {
+                $loader = new FilesystemLoader('app/view');
+                $twig = new Environment($loader);
+                $template = $twig->load('register.html');
+                $parameters = array();
+                $parameters['message'] = "exists";
+
+                $conteudo = $template->render($parameters);
+                echo $conteudo;
+            } else  if ($resp) {
                 header("Location:?page=login&method=verify");
             } else {
-                header("Location:?page=login&page=register&error");
+                header("Location:?page=error");
             }
         } catch (Exception $e) {
-            header("Location:?page=login&page=register&error");
+            header("Location:?page=error");
         }
     }
 
@@ -75,7 +86,7 @@ class LoginController
         if (User::sendVerification($email, $vkey)) {
             header("Location:?page=login&method=verify");
         } else {
-            header("Location:?page=login&page=register&error");
+            header("Location:?page=error");
         }
     }
 

@@ -7,60 +7,52 @@
                 <p>Already have an account? <a href="?page=login" class="linkColor"><b>Login</b></a></p>
             </div>
             <div class="ui inverted segment">
-                <div class="ui stackable two column grid">
+                {%if message == "exists"%}
+                <div class="ui inverted red segment">
+                    <i class="exclamation circle icon"></i>
+                    Username already chosen, enter another one.
+                </div>
+                {%endif%}
+
+                <div class="ui stackable column centered grid">
                     <div class="column">
                         <div class="ui clearing inverted segment">
-                            <form name="formLogin" action="?page=login&method=save" method="POST">
-                                <div class="ui inverted small form">
-                                    <div class="field">
-                                        <label for="username">User Name</label>
-                                        <input name="username" type="text" id="username">
-                                    </div>
-                                    <div class="field">
-                                        <label for="email">E-mail</label>
-                                        <input name="email" type="email" id="email">
-                                    </div>
-                                    <div class="field">
-                                        <label for="password">Password</label>
-                                        <input name="password" type="password" id="password">
-                                    </div>
-                                    <div class="field">
-                                        <label for="passwordRetyped">Retype password</label>
-                                        <input name="passwordRetyped" type="password" id="passwordRetyped">
-                                    </div>
-                                    <div class="field">
-                                        <div class="ui checkbox">
-                                            <input type="checkbox" name="showPass" id="showPass">
-                                            <label name="showPassword" for="showPass">Show password</label>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <div class="ui checkbox">
-                                            <input type="checkbox" name="terms" id="terms">
-                                            <label name="terms" for="terms">I agree with the <a href=""
-                                                    class="linkColor">terms and
-                                                    conditions</a></label>
-                                        </div>
-                                    </div>
-                                    <button class="ui right floated teal button" type="submit">Register</button>
+                            <form class="ui inverted small form registerForm" name="formRegister"
+                                action="?page=login&method=save" method="POST">
+                                <div class="ui error message"></div>
+                                <div class="field">
+                                    <label for="username">User Name</label>
+                                    <input name="username" type="text" id="username">
                                 </div>
+                                <div class="field">
+                                    <label for="email">E-mail</label>
+                                    <input name="email" type="email" id="email">
+                                </div>
+                                <div class="field">
+                                    <label for="password">Password</label>
+                                    <input class="password" name="password" type="password" id="password">
+                                </div>
+                                <div class="field">
+                                    <label for="passwordRetyped">Retype password</label>
+                                    <input class="password" name="passwordRetyped" type="password" id="passwordRetyped">
+                                </div>
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" onclick="showPass()" name="showPassword"
+                                            id="showPassword">
+                                        <label name="showPassword" for="showPassword">Show password</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" name="terms" id="terms">
+                                        <label name="terms" for="terms">I agree with the <a href="#!"
+                                                class="linkColor">terms and
+                                                conditions</a></label>
+                                    </div>
+                                </div>
+                                <button class="ui right floated teal submit button">Register</button>
                             </form>
-                        </div>
-                    </div>
-                    <div class="column loginAltenative">
-                        <div class="ui segments">
-                            <div class="ui inverted segment">
-                                <div class="ui segment">
-                                    <i class="big google icon"></i>
-                                    <span>Register with Google</span>
-                                </div>
-                            </div>
-                            <div class="ui inverted segment">
-                                <div class="ui segment">
-                                    <i class="big facebook icon"></i>
-                                    <span>Register with Facebook</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -11,15 +11,20 @@ class User
      * Creates the user end sends the email verification
      *
      * @param  mixed $userData
-     * @return bool
+     * @return bool|string
      */
-    public static function create($userData): bool
+    public static function create($userData): bool|string
     {
         //User data:
         $username = trim($userData['username']);
         $email = trim($userData['email']);
         $password = password_hash($userData['password'], PASSWORD_BCRYPT);
         $vkey = md5(time() . "$username");
+
+        //Verifying if username exists
+        if (self::getUser(array("username" => $username))) {
+            return "exists";
+        }
 
         //Connecting with databese
         $con = Connection::getConn();
