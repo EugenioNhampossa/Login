@@ -61,11 +61,20 @@ class LoginController
     {
         try {
             if (User::create($_POST)) {
-                header("Location:?page=login&method=verify&email=" . $_POST['email']);
+                header("Location:?page=login&method=verify");
             } else {
                 header("Location:?page=login&page=register&error");
             }
         } catch (Exception $e) {
+            header("Location:?page=login&page=register&error");
+        }
+    }
+
+    public function resendEmail($email, $vkey)
+    {
+        if (User::sendVerification($email, $vkey)) {
+            header("Location:?page=login&method=verify");
+        } else {
             header("Location:?page=login&page=register&error");
         }
     }
@@ -76,7 +85,7 @@ class LoginController
      * this method prints the verification page
      * @return void
      */
-    public function verify($email)
+    public function verify()
     {
         try {
             $loader = new FilesystemLoader('app/view');
@@ -84,7 +93,7 @@ class LoginController
             $template = $twig->load('verifyEmail.html');
 
             $parameters = array();
-            $parameters['email'] = $email;
+            //$parameters['email'] = $email;
 
             $conteudo = $template->render($parameters);
 
@@ -105,7 +114,7 @@ class LoginController
         try {
 
             $loader = new FilesystemLoader('app/view');
-            $twig = new \Twig\Environment($loader);
+            $twig = new Environment($loader);
             $template = $twig->load('confirmVerification.html');
             $parameters = array();
             if (isset($_GET['vkey'])) {
@@ -117,6 +126,40 @@ class LoginController
             }
             $conteudo = $template->render($parameters);
 
+            echo $conteudo;
+        } catch (Exception $e) {
+            echo $e;
+        }
+    }
+
+    public function login()
+    {
+        try {
+            $loader = new FilesystemLoader('app/view');
+            $twig = new Environment($loader);
+
+            $user = User::getUser($_POST);
+            $typedPassword = $_POST['password'];
+            $parameters = array();
+            $load = "login.html";
+            $parameters['message'] = "";
+            if (!$user) {
+                $parameters['message'] = "invalid";
+            } else if ($user->verified == 0) {
+                $parameters['vkey'] = $user->vkey;
+                $parameters['message'] = "notVerified";
+            } else if (password_verify($typedPassword, $user->password)) {
+                $_SESSION['loged'] = "";
+                $_SESSION['username'] = $user->username;
+                $_SESSION['email'] = $user->email;
+                $_SESSION['detecreated'] = $user->datecreated;
+                header("Location:?page=home");
+            } else {
+                $parameters['message'] = "invalid";
+            }
+
+            $template = $twig->load($load);
+            $conteudo = $template->render($parameters);
             echo $conteudo;
         } catch (Exception $e) {
             echo $e;

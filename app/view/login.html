@@ -7,35 +7,51 @@
                 <p>Don't have an account? <a href="?page=login&method=register" class="linkColor"><b>Register</b></a>
                 </p>
             </div>
+
             <div class="ui inverted segment">
+                {%if message == "invalid"%}
+                <div class="ui inverted red segment">
+                    <i class="exclamation circle icon"></i>
+                    Invalid password or username
+                </div>
+                {%endif%}
+                {%if message == "notVerified"%}
+                <div class="ui inverted red clearing segment">
+                    <i class="warning icon"></i>
+                    User not not verified
+                    <a class="ui right floated button" href="#">Verify</a>
+                </div>
+                {%endif%}
+
                 <div class="ui stackable two column grid">
                     <div class="column">
                         <div class="ui clearing inverted segment">
-                            <form name="formLogin" action="?page=home" method="POST">
-                                <div class="ui inverted form">
-                                    <div class="field">
-                                        <label for="">User Name</label>
-                                        <input type="text" name="" id="">
+                            <form class="ui inverted form loginForm" name="formLogin" action="?page=login&method=login"
+                                method="POST">
+                                <div class="ui error message"></div>
+
+                                <div class="field">
+                                    <label for="username">User Name</label>
+                                    <input type="text" name="username" id="username">
+                                </div>
+                                <div class="field">
+                                    <label for="password">Password</label>
+                                    <input type="password" name="password" id="password">
+                                </div>
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" onclick="showPass()" name="" id="">
+                                        <label for="">Show password</label>
                                     </div>
-                                    <div class="field">
-                                        <label for="">Password</label>
-                                        <input type="password" name="" id="">
+                                </div>
+                                <div class="ui stackable grid">
+                                    <div style="padding-top: 25px;" class="fourteen wide column">
+                                        <a class="linkColor" href="#">
+                                            <h4>Forgot your password?</h4>
+                                        </a>
                                     </div>
-                                    <div class="field">
-                                        <div class="ui checkbox">
-                                            <input type="checkbox" name="" id="">
-                                            <label for="">Show password</label>
-                                        </div>
-                                    </div>
-                                    <div class="ui stackable grid">
-                                        <div style="padding-top: 25px;" class="fourteen wide column">
-                                            <a class="linkColor" href="#">
-                                                <h4>Forgot your password?</h4>
-                                            </a>
-                                        </div>
-                                        <div class="two wide column">
-                                            <button class="ui right floated teal button" type="submit">Login</button>
-                                        </div>
+                                    <div class="two wide column">
+                                        <button class="ui right floated teal submit button">Login</button>
                                     </div>
                                 </div>
                             </form>

@@ -8,9 +8,10 @@ body{
     color: #e79c25;
 }
 
-a:hover{
+a.linkColor:hover{
     color: #e79c25;
 }
+
 /*-------------------*/
  
 /*Alternative login div*/

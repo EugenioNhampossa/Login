@@ -7,12 +7,13 @@ class User
 {
 
     /**
+     * create
      * Creates the user end sends the email verification
      *
      * @param  mixed $userData
-     * @return void
+     * @return bool
      */
-    public static function create($userData)
+    public static function create($userData): bool
     {
         //User data:
         $username = trim($userData['username']);
@@ -31,16 +32,31 @@ class User
         $response = $sql->execute();
         //Verifying the database insertion
         if ($response > 0) {
-            $html = "<a href='http://localhost/Login/?page=login&method=confirm&vkey=$vkey'>Verify your email</a>";
-
-            $mail = new Mail();
-            $mailSended = $mail->sendEmail($email, "Email verification", $html);
+            $mailSended = self::sendVerification($email, $vkey);
         }
 
         return $mailSended && $response > 0;
     }
 
-    public static function confirm($vkey)
+    public static function sendVerification($toEmail, $vkey)
+    {
+        $html = "<a href='http://localhost/Login/?page=login&method=confirm&vkey=$vkey'>Verify your email</a>";
+
+        $mail = new Mail();
+        $mailSended = $mail->sendEmail($toEmail, "Email verification", $html);
+
+        return $mailSended;
+    }
+
+
+    /**
+     * confirm
+     * Gets de user using the verification key provided and updates the 
+     * verified field
+     * @param  mixed $vkey
+     * @return bool
+     */
+    public static function confirm($vkey): bool
     {
         try {
             $con = Connection::getConn();
@@ -50,6 +66,29 @@ class User
             $sql->bindValue(":vkey", $vkey, PDO::PARAM_STR);
             $response = $sql->execute();
             return $response > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * getUser
+     * return the user that matches with the username
+     * @param  mixed $credentials
+     * @return bool|object
+     */
+    public static function getUser($credentials): bool|object
+    {
+        try {
+            $username = $credentials['username'];
+            $con = Connection::getConn();
+            $sql = "SELECT * from user WHERE username=:username";
+            $sql = $con->prepare($sql);
+            $sql->bindValue(":username", $username, PDO::PARAM_STR);
+            $sql->execute();
+
+            $result = $sql->fetchObject("User");
+            return $result;
         } catch (Exception $e) {
             return false;
         }
