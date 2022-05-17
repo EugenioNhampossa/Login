@@ -7,10 +7,11 @@
                 <p>Already have an account? <a href="?page=login" class="linkColor"><b>Login</b></a></p>
             </div>
             <div class="ui inverted segment">
-                {%if message == "exists"%}
+                {%if message != ""%}
                 <div class="ui inverted red segment">
                     <i class="exclamation circle icon"></i>
-                    Username already chosen, enter another one.
+                    {{message}}
+                    {%set message=''%}
                 </div>
                 {%endif%}
 

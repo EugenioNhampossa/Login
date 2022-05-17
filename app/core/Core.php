@@ -10,7 +10,7 @@ class Core
             $action = $urlGet['method'];
         }
 
-        if (isset($urlGet['page']) && isset($_SESSION['loged'])) {
+        if (isset($urlGet['page']) && isset($_SESSION['logedUser'])) {
             $controller = ucfirst($urlGet['page'] . 'Controller');
         } else {
             $controller = 'LoginController';

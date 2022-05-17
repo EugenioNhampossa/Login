@@ -9,17 +9,13 @@
             </div>
 
             <div class="ui inverted segment">
-                {%if message == "invalid"%}
-                <div class="ui inverted red segment">
-                    <i class="exclamation circle icon"></i>
-                    Invalid password or username
-                </div>
-                {%endif%}
-                {%if message == "notVerified"%}
+                {%if message != ""%}
                 <div class="ui inverted red clearing segment">
                     <i class="warning icon"></i>
-                    User not not verified
+                    {{message}}
+                    {%if verified == 0%}
                     <a class="ui right floated button" href="#">Verify</a>
+                    {%endif%}
                 </div>
                 {%endif%}
 
@@ -31,7 +27,7 @@
                                 <div class="ui error message"></div>
 
                                 <div class="field">
-                                    <label for="username">User Name</label>
+                                    <label for="username">Username</label>
                                     <input type="text" name="username" id="username">
                                 </div>
                                 <div class="field">
@@ -40,8 +36,9 @@
                                 </div>
                                 <div class="field">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" onclick="showPass()" name="" id="">
-                                        <label for="">Show password</label>
+                                        <input type="checkbox" onclick="showPass()" name="showPassword"
+                                            id="showPassword">
+                                        <label for="showPassword">Show password</label>
                                     </div>
                                 </div>
                                 <div class="ui stackable grid">

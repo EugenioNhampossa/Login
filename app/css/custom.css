@@ -11,20 +11,13 @@ body{
 a.linkColor:hover{
     color: #e79c25;
 }
-
-/*-------------------*/
- 
-/*Alternative login div*/
-@media (min-width: 768px) {
-.ui.grid>.column:not(.row).loginAltenative {
-        padding-top: 100px;
-    }
+section{
+    height: 100vh;
+    display: grid;
 }
-/*--------------------*/
-
-.middleContainer{
-    padding-top: 4%;
-    padding-bottom: 2%;
+/*-------------------*/
+.ui.text.container.middleContainer{
+    margin: auto;
 }
 
 

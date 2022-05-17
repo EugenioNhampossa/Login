@@ -22,8 +22,13 @@ class User
         $vkey = md5(time() . "$username");
 
         //Verifying if username exists
-        if (self::getUser(array("username" => $username))) {
+        if (self::getUser($username, "username")) {
             return "exists";
+        }
+
+        //Verifying if email exists
+        if (self::getUser($email, "email")) {
+            return "emailExists";
         }
 
         //Connecting with databese
@@ -59,9 +64,9 @@ class User
      * Gets de user using the verification key provided and updates the 
      * verified field
      * @param  mixed $vkey
-     * @return bool
+     * @return bool|object
      */
-    public static function confirm($vkey): bool
+    public static function confirm($vkey): bool|object
     {
         try {
             $con = Connection::getConn();
@@ -69,8 +74,8 @@ class User
             $sql = $con->prepare($sql);
             $sql->bindValue(":n", 1, PDO::PARAM_INT);
             $sql->bindValue(":vkey", $vkey, PDO::PARAM_STR);
-            $response = $sql->execute();
-            return $response > 0;
+            $sql->execute();
+            return $sql->rowCount() > 0;
         } catch (Exception $e) {
             return false;
         }
@@ -79,17 +84,16 @@ class User
     /**
      * getUser
      * return the user that matches with the username
-     * @param  mixed $credentials
+     * @param  mixed $credential
      * @return bool|object
      */
-    public static function getUser($credentials): bool|object
+    public static function getUser($credential, $userData): bool|object
     {
         try {
-            $username = $credentials['username'];
             $con = Connection::getConn();
-            $sql = "SELECT * from user WHERE username=:username";
+            $sql = "SELECT * from user WHERE $userData=:$userData";
             $sql = $con->prepare($sql);
-            $sql->bindValue(":username", $username, PDO::PARAM_STR);
+            $sql->bindValue(":$userData", $credential, PDO::PARAM_STR);
             $sql->execute();
 
             $result = $sql->fetchObject("User");
