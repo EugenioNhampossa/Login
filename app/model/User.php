@@ -42,22 +42,21 @@ class User
         $response = $sql->execute();
         //Verifying the database insertion
         if ($response > 0) {
-            $mailSended = self::sendVerification($email, $vkey);
+            $html = "<a href='http://localhost/Login/?page=login&method=confirm&vkey=$vkey'>Verify your email</a>";
+
+            $mailSended = self::sendVerification($email, "Email Verification", $html);
         }
 
         return $mailSended && $response > 0;
     }
 
-    public static function sendVerification($toEmail, $vkey)
+    public static function sendVerification($toEmail, $title, $content)
     {
-        $html = "<a href='http://localhost/Login/?page=login&method=confirm&vkey=$vkey'>Verify your email</a>";
-
         $mail = new Mail();
-        $mailSended = $mail->sendEmail($toEmail, "Email verification", $html);
+        $mailSended = $mail->sendEmail($toEmail, $title, $content);
 
         return $mailSended;
     }
-
 
     /**
      * confirm
@@ -98,6 +97,21 @@ class User
 
             $result = $sql->fetchObject("User");
             return $result;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public static function updatePassword($email, $password)
+    {
+        try {
+            $con = Connection::getConn();
+            $sql = "UPDATE user SET password = :pass WHERE email = :email";
+            $sql = $con->prepare($sql);
+            $sql->bindValue(":pass", $password, PDO::PARAM_STR);
+            $sql->bindValue(":email", $email, PDO::PARAM_STR);
+            $sql->execute();
+            return $sql->rowCount() > 0;
         } catch (Exception $e) {
             return false;
         }

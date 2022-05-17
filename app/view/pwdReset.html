@@ -1,0 +1,56 @@
+<section>
+    <div class="ui text container middleContainer">
+        <div class="ui segments innerContainer">
+            <div class="ui center aligned inverted segment">
+                <i class="huge user circle icon"></i>
+                <h3 class="ui header">Password Reset</h3>
+            </div>
+            <div class="ui inverted segment">
+                <a href="javascript:history.back()" class="ui button teal inverted">Back</a>
+                <a href="?page=Login" class="ui button teal inverted">Login</a>
+            </div>
+            <div class="ui inverted clearing segment">
+                {%if message != ""%}
+                <div class="ui inverted red clearing segment">
+                    <i class="warning icon"></i>
+                    {{message}}
+                </div>
+                {%endif%}
+                <form class="ui inverted small form pwdResetForm" action="?page=login&method=updatePassword"
+                    method="POST" id="formPwdReset" name="formPwdReset">
+                    <div class="ui error message"></div>
+                    <div class="field">
+                        <label for="typedCode">Enter the code sent to your email</label>
+                        <input type="text" name="typedCode" id="typedCode">
+                    </div>
+                    <div class="field">
+                        <label for="newPassword">New password</label>
+                        <input class="password" type="password" name="newPassword" id="newPassword">
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" onclick="showPass()" name="showPassword" id="showPassword">
+                            <label name="showPassword" for="showPassword">Show password</label>
+                        </div>
+                    </div>
+                    <a href="#" class="ui right floated teal button" id="btReset">Reset</a>
+                </form>
+                <!--Modal-->
+                <div class="ui mini modal pwdreset">
+                    <div class="header">Confirm Password Reset</div>
+                    <div class="content">
+                        <h4>Do you want to reset your password??</h4>
+                    </div>
+                    <div class="actions">
+                        <div class="ui cancel red button">Cancel</div>
+                        <div class="ui approve teal button">Yes</div>
+                    </div>
+                </div>
+                <!------------->
+            </div>
+            <div class="ui secondary inverted segment">
+                All rights reserved
+            </div>
+        </div>
+    </div>
+</section>

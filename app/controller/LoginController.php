@@ -62,8 +62,12 @@ class LoginController
     public function save()
     {
         try {
+            $resp = false;
+
+            if (isset($_POST['username'])) {
+                $resp = User::create($_POST);
+            }
             //loading twig
-            $resp = User::create($_POST);
             $loader = new FilesystemLoader('app/view');
             $twig = new Environment($loader);
             $template = $twig->load('register.html');
@@ -91,25 +95,6 @@ class LoginController
             header("Location:?page=error");
         }
     }
-
-
-    /**
-     * resendEmail
-     * this method send the verification email
-     * @param  mixed $email
-     * @param  mixed $vkey
-     * @return void
-     */
-    public function resendEmail($email, $vkey)
-    {
-        if (User::sendVerification($email, $vkey)) {
-            $_SESSION['email'] = $email; //using session to print the email adress provided
-            header("Location:?page=login&method=verify");
-        } else {
-            header("Location:?page=error");
-        }
-    }
-
 
     /**
      * verify
@@ -182,15 +167,19 @@ class LoginController
             //Loading twig
             $loader = new FilesystemLoader('app/view');
             $twig = new Environment($loader);
-
-            //getting the user with the user name providede
-            $user = User::getUser($_POST['username'], "username");
-
-            $typedPassword = $_POST['password']; //typed password
+            $user = false;
             $parameters = array();
+
+            if (isset($_POST['username'])) {
+                //getting the user with the user name provided
+                $user = User::getUser($_POST['username'], "username");
+                $typedPassword = $_POST['password']; //typed password
+            }
+
             //the login page will be reloaded if something goes wrong with the user credentials
             $load = "login.html";
             $parameters['message'] = "";
+            $parameters['updated'] = 0;
             $parameters['verified'] = 1;
 
             if (!$user) { // verifying the authenticity of the user
@@ -218,5 +207,126 @@ class LoginController
             header("Location:?page=error");
             echo $e;
         }
+    }
+
+    public function resetPassword()
+    {
+        try {
+
+            $loader = new FilesystemLoader('app/view');
+            $twig = new Environment($loader);
+            $template = $twig->load('pwdReset.html');
+
+            $conteudo = $template->render();
+
+            echo $conteudo;
+        } catch (Exception $e) {
+            header("Location:?page=error");
+            echo $e;
+        }
+    }
+
+    public function updatePassword()
+    {
+        try {
+            $loader = new FilesystemLoader('app/view');
+            $twig = new Environment($loader);
+            $load = 'pwdReset.html';
+            $resp = false;
+            $parameters = array();
+            $parameters['message'] = "";
+            $parameters['updated'] = 0;
+
+            if (isset($_POST['newPassword']) && isset($_SESSION['code'])) {
+                if ($_SESSION['code'] == $_POST['typedCode']) {
+                    $email = $_SESSION['resetEmail'];
+                    $password = password_hash($_POST['newPassword'], PASSWORD_BCRYPT);
+                    $resp = User::updatePassword($email, $password);
+                } else {
+                    $parameters['message'] = "The given code don´t match";
+                }
+
+                if (!$resp) {
+                    $parameters['message'] = "Something went wrong while updating your password";
+                } else {
+                    $parameters['message'] = "Your password was updated";
+                    $parameters['updated'] = 1;
+                    $load = "login.html";
+                }
+            } else {
+                header("Location:?page=error");
+            }
+
+            $template = $twig->load($load);
+            $conteudo = $template->render($parameters);
+
+            echo $conteudo;
+        } catch (Exception $e) {
+            header("Location:?page=error");
+            echo $e;
+        }
+    }
+
+    public function pickUser()
+    {
+        try {
+
+            $loader = new FilesystemLoader('app/view');
+            $twig = new Environment($loader);
+            $template = $twig->load('pickUser.html');
+
+            $conteudo = $template->render();
+
+            echo $conteudo;
+        } catch (Exception $e) {
+            header("Location:?page=error");
+            echo $e;
+        }
+    }
+
+    public function sendResetCode()
+    {
+        try {
+            $loader = new FilesystemLoader('app/view');
+            $twig = new Environment($loader);
+            $load = "pickUser.html";
+            $parameters = array();
+            $parameters['message'] = "";
+            $user = false;
+
+            if (isset($_POST['username'])) {
+                $user = User::getUser($_POST['username'], "username");
+            }
+
+            if (!$user) {
+                $parameters['message'] = "Provided username is not registered";
+            } else {
+                $email = $user->email;
+                $code = self::generateCode();
+                $html = "<h2>Password Reset Code</h2><h3>$code</h3>";
+                if (User::sendVerification($email, "Password Reset", $html)) {
+                    $_SESSION['resetEmail'] = $email;
+                    $_SESSION['code'] = $code;
+                    $load = "pwdReset.html";
+                } else {
+                    $parameters['message'] = "Error sendig email";
+                }
+            }
+            $template = $twig->load($load);
+            $conteudo = $template->render($parameters);
+            echo $conteudo;
+        } catch (Exception $e) {
+            header("Location:?page=error");
+            echo $e;
+        }
+    }
+
+    public static function generateCode()
+    {
+        $code = 0;
+        for ($i = 0; $i < 4; $i++) {
+            $code = ($code * 10) + rand(0, 9);
+        }
+        return $code;
     }
 }

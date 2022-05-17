@@ -10,6 +10,7 @@
 
             <div class="ui inverted segment">
                 {%if message != ""%}
+                {%if updated == 0%}
                 <div class="ui inverted red clearing segment">
                     <i class="warning icon"></i>
                     {{message}}
@@ -17,6 +18,13 @@
                     <a class="ui right floated button" href="#">Verify</a>
                     {%endif%}
                 </div>
+                {%else%}
+                <div class="ui inverted green clearing segment">
+                    <i class="warning icon"></i>
+                    {{message}}
+                    {%set updated=0%}
+                </div>
+                {%endif%}
                 {%endif%}
 
                 <div class="ui stackable two column grid">
@@ -43,7 +51,7 @@
                                 </div>
                                 <div class="ui stackable grid">
                                     <div style="padding-top: 25px;" class="fourteen wide column">
-                                        <a class="linkColor" href="#">
+                                        <a class="linkColor" href="?page=login&method=pickUser">
                                             <h4>Forgot your password?</h4>
                                         </a>
                                     </div>

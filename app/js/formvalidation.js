@@ -1,37 +1,5 @@
-//Validanting login form
-$(".ui.form.loginForm").form({
-  fields: {
-    username: {
-      identifier: "username",
-      rules: [
-        {
-          type: "empty",
-          prompt: "Please enter a username",
-        },
-        {
-          type: "minLength[4]",
-          prompt: "Your username must be at least {ruleValue} characters",
-        },
-      ],
-    },
-    password: {
-      identifier: "password",
-      rules: [
-        {
-          type: "empty",
-          prompt: "Please enter a password",
-        },
-        {
-          type: "minLength[6]",
-          prompt: "Your password must be at least {ruleValue} characters",
-        },
-      ],
-    },
-  },
-});
-
 //Validating Register form
-$(".ui.form.registerForm").form({
+$(".ui.form").form({
   fields: {
     username: {
       identifier: "username",
@@ -49,6 +17,10 @@ $(".ui.form.registerForm").form({
     email: {
       identifier: "email",
       rules: [
+        {
+          type: "empty",
+          prompt: "Please enter a email",
+        },
         {
           type: "email",
           prompt: "Please enter a valid e-mail",
@@ -96,6 +68,28 @@ $(".ui.form.registerForm").form({
         {
           type: "checked",
           prompt: "You must agree to the terms and conditions",
+        },
+      ],
+    },
+    newPassword: {
+      identifier: "newPassword",
+      rules: [
+        {
+          type: "empty",
+          prompt: "Please enter a password",
+        },
+        {
+          type: "minLength[6]",
+          prompt: "Your password must be at least {ruleValue} characters",
+        },
+      ],
+    },
+    number: {
+      identifier: "typedCode",
+      rules: [
+        {
+          type: "integer",
+          prompt: "Please enter a valid number",
         },
       ],
     },
