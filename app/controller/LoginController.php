@@ -63,18 +63,18 @@ class LoginController
     {
         try {
             $resp = false;
+            //Creating parameters
+            $parameters = array();
+            $parameters['message'] = "";
 
             if (isset($_POST['username'])) {
                 $resp = User::create($_POST);
+                $parameters['enteredData'] = $_POST;
             }
             //loading twig
             $loader = new FilesystemLoader('app/view');
             $twig = new Environment($loader);
             $template = $twig->load('register.html');
-
-            //Creating parameters
-            $parameters = array();
-            $parameters['message'] = "";
 
 
             if ($resp === "exists") { //Verifying if username already exists
@@ -127,6 +127,7 @@ class LoginController
 
     /**
      * confirm
+     * 
      * print the page that confirms the verificarion
      * @return void
      */
@@ -159,6 +160,9 @@ class LoginController
 
     /**
      * login
+     * 
+     * this method will verify the user credentials, if it exists then
+     * the user will be redirected to home page.
      * @return void
      */
     public function login()
@@ -174,12 +178,13 @@ class LoginController
                 //getting the user with the user name provided
                 $user = User::getUser($_POST['username'], "username");
                 $typedPassword = $_POST['password']; //typed password
+                $parameters['enteredData'] = $_POST;
             }
 
             //the login page will be reloaded if something goes wrong with the user credentials
             $load = "login.html";
             $parameters['message'] = "";
-            $parameters['updated'] = 0;
+            //$parameters['updated'] = 0;
             $parameters['verified'] = 1;
 
             if (!$user) { // verifying the authenticity of the user
@@ -209,6 +214,13 @@ class LoginController
         }
     }
 
+    /**
+     * resetPassword
+     * 
+     * this method will print the form for password reset
+     * in the form the user have to enter the code sent by email and his/her new password
+     * @return void
+     */
     public function resetPassword()
     {
         try {
@@ -226,32 +238,47 @@ class LoginController
         }
     }
 
+    /**
+     * updatePassword
+     * 
+     * this method will process the form for password reset, it will compare
+     * the code typed and the code sent by email if it matches, then the password
+     * will be updated
+     * @return void
+     */
     public function updatePassword()
     {
         try {
+            //loading twig
             $loader = new FilesystemLoader('app/view');
             $twig = new Environment($loader);
-            $load = 'pwdReset.html';
+
+            $load = 'pwdReset.html'; //by default, the user is redirected to the same page
             $resp = false;
             $parameters = array();
             $parameters['message'] = "";
+            /** 
+             * if this process succeed, then the updated status will turn to 1, and the user will
+             * be redirected to login page that prints the message "updated".
+             */
             $parameters['updated'] = 0;
 
+            //Verifying if its all setup to update the password
             if (isset($_POST['newPassword']) && isset($_SESSION['code'])) {
-                if ($_SESSION['code'] == $_POST['typedCode']) {
+                if ($_SESSION['code'] == $_POST['typedCode']) { //comparing the codes
                     $email = $_SESSION['resetEmail'];
                     $password = password_hash($_POST['newPassword'], PASSWORD_BCRYPT);
-                    $resp = User::updatePassword($email, $password);
+                    $resp = User::updatePassword($email, $password); //updating user´s password
+
+                    if (!$resp) { //if the process succeed
+                        $parameters['message'] = "Something went wrong while updating your password";
+                    } else {
+                        $parameters['message'] = "Your password was updated";
+                        $parameters['updated'] = 1;
+                        $load = "login.html";
+                    }
                 } else {
                     $parameters['message'] = "The given code don´t match";
-                }
-
-                if (!$resp) {
-                    $parameters['message'] = "Something went wrong while updating your password";
-                } else {
-                    $parameters['message'] = "Your password was updated";
-                    $parameters['updated'] = 1;
-                    $load = "login.html";
                 }
             } else {
                 header("Location:?page=error");
@@ -267,6 +294,12 @@ class LoginController
         }
     }
 
+    /**
+     * pickUser
+     *
+     * this method will print the form to select the user
+     * @return void
+     */
     public function pickUser()
     {
         try {
@@ -289,6 +322,7 @@ class LoginController
         try {
             $loader = new FilesystemLoader('app/view');
             $twig = new Environment($loader);
+
             $load = "pickUser.html";
             $parameters = array();
             $parameters['message'] = "";
@@ -296,6 +330,7 @@ class LoginController
 
             if (isset($_POST['username'])) {
                 $user = User::getUser($_POST['username'], "username");
+                $parameters['enteredData'] = $_POST;
             }
 
             if (!$user) {
@@ -303,7 +338,7 @@ class LoginController
             } else {
                 $email = $user->email;
                 $code = self::generateCode();
-                $html = "<h2>Password Reset Code</h2><h3>$code</h3>";
+                $html = self::resetHtml($user->username, $code);
                 if (User::sendVerification($email, "Password Reset", $html)) {
                     $_SESSION['resetEmail'] = $email;
                     $_SESSION['code'] = $code;
@@ -321,10 +356,22 @@ class LoginController
         }
     }
 
+    public static function resetHtml($username, $code)
+    {
+        $html = '<div style = "text-align: center;">';
+        $html .= '<img src="https://img.icons8.com/material-rounded/96/000000/user-male-circle.png"/>';
+        $html .= "<h2>Hello $username</h2>";
+        $html .= "<h4>Password Reset Code:</h4>";
+        $html .= '<p style="font-size: xx-large;">' . "$code</p>";
+        $html .= '</div>';
+
+        return $html;
+    }
+
     public static function generateCode()
     {
         $code = 0;
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 6; $i++) {
             $code = ($code * 10) + rand(0, 9);
         }
         return $code;

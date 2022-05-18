@@ -42,12 +42,24 @@ class User
         $response = $sql->execute();
         //Verifying the database insertion
         if ($response > 0) {
-            $html = "<a href='http://localhost/Login/?page=login&method=confirm&vkey=$vkey'>Verify your email</a>";
+            $html = self::verificationHtml($username, $vkey);
 
             $mailSended = self::sendVerification($email, "Email Verification", $html);
         }
 
         return $mailSended && $response > 0;
+    }
+
+    public static function verificationHtml($username, $vkey)
+    {
+        $html = '<div style = "text-align: center;">';
+        $html .= '<img src="https://img.icons8.com/material-rounded/96/000000/user-male-circle.png"/>';
+        $html .= "<h2>Hello $username</h2>";
+        $html .= "<h4>You can verify your email clicking the link below:</h4>";
+        $html .= "<a href='http://localhost/Login/?page=login&method=confirm&vkey=$vkey'>Verify your email</a>";
+        $html .= '</div>';
+
+        return $html;
     }
 
     public static function sendVerification($toEmail, $title, $content)
