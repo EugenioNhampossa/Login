@@ -1,3 +1,49 @@
 <section>
-    <h1 class="ui inverted">Home</h1>
+    <div class="ui text container middleContainer">
+        <div class="ui raised segments">
+            <div class="ui center aligned inverted segment">
+                <i class="huge home circle icon"></i>
+                <h3 class="ui header">HOME</h3>
+            </div>
+            <div class="ui inverted clearing segment">
+                <div class="ui inverted secondary  menu">
+                    <div class="active item">
+                        <i class="ui small user icon"></i>
+                        User information
+                    </div>
+                    <div class="right menu">
+                        <a class="ui item">
+                            <a href="?page=login&method=logout" class="item">Logout</a>
+                        </a>
+                    </div>
+                </div>
+                <div class="ui inverted clearing segment">
+                    <table class="ui basic definition inverted table">
+                        <tbody>
+                            <tr>
+                                <td>ID</td>
+                                <td>{{id}}</td>
+                            </tr>
+                            <tr>
+                                <td>Username</td>
+                                <td>{{username}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td class="linkColor">{{email}}</td>
+                            </tr>
+                            <tr>
+                                <td>Date Created</td>
+                                <td>{{datecreated}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="ui secondary inverted segment">
+                All rights reserved
+            </div>
+        </div>
+    </div>
 </section>

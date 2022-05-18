@@ -26,7 +26,7 @@ require_once "vendor/autoload.php";
 //storring all htlm in the template variable
 $template = file_get_contents('app/template/structure.html');
 
-//capturin any output from controllers
+//capturing any output from controllers
 ob_start();
 
 $core = new Core;

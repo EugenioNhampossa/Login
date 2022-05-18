@@ -11,9 +11,17 @@ class HomeController
             $twig = new \Twig\Environment($loader);
             $template = $twig->load('home.html');
 
-            $parametros = array();
+            $parameters = array();
+            if (isset($_SESSION['logedUser'])) {
+                $parameters['id'] = $_SESSION['logedUser']['id'];
+                $parameters['username'] = $_SESSION['logedUser']['username'];
+                $parameters['email'] = $_SESSION['logedUser']['email'];
 
-            $conteudo = $template->render();
+                $date = date_create($_SESSION['logedUser']['datecreated']);
+                $parameters['datecreated'] = date_format($date, 'D d-M-Y H:m');
+            }
+
+            $conteudo = $template->render($parameters);
 
             echo $conteudo;
         } catch (Exception $e) {

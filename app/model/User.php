@@ -50,6 +50,14 @@ class User
         return $mailSended && $response > 0;
     }
 
+    /**
+     * verificationHtml
+     *
+     * this method returns the html that should be sent to user´s email
+     * @param  mixed $username
+     * @param  mixed $vkey
+     * @return void
+     */
     public static function verificationHtml($username, $vkey)
     {
         $html = '<div style = "text-align: center;">';
@@ -62,6 +70,15 @@ class User
         return $html;
     }
 
+    /**
+     * sendVerification
+     *
+     * this method sends an email
+     * @param  mixed $toEmail
+     * @param  mixed $title
+     * @param  mixed $content
+     * @return void
+     */
     public static function sendVerification($toEmail, $title, $content)
     {
         $mail = new Mail();
@@ -114,6 +131,14 @@ class User
         }
     }
 
+    /**
+     * updatePassword
+     *
+     * this method updates the users password
+     * @param  mixed $email
+     * @param  mixed $password
+     * @return void
+     */
     public static function updatePassword($email, $password)
     {
         try {

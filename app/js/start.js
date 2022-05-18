@@ -8,3 +8,7 @@ $("#btReset").on("click", function (event) {
     })
     .modal("show");
 });
+
+$("button").mouseenter(function () {
+  $(this).transition("pulse");
+});

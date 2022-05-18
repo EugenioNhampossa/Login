@@ -196,9 +196,10 @@ class LoginController
             } else if (password_verify($typedPassword, $user->password)) { //confirming password
                 //Loged user data
                 $_SESSION['logedUser'] = [
+                    'id' => $user->id,
                     'username' => $user->username,
                     'email' => $user->email,
-                    'detecreated' => $user->datecreated
+                    'datecreated' => $user->datecreated
                 ];
                 header("Location:?page=home"); //Redirecting to home page
             } else {
@@ -317,6 +318,13 @@ class LoginController
         }
     }
 
+    /**
+     * sendResetCode
+     * 
+     * this method get the user with the username provided,
+     * end send the email whith a reset code
+     * @return void
+     */
     public function sendResetCode()
     {
         try {
@@ -329,7 +337,7 @@ class LoginController
             $user = false;
 
             if (isset($_POST['username'])) {
-                $user = User::getUser($_POST['username'], "username");
+                $user = User::getUser($_POST['username'], "username"); //getting the user
                 $parameters['enteredData'] = $_POST;
             }
 
@@ -337,12 +345,13 @@ class LoginController
                 $parameters['message'] = "Provided username is not registered";
             } else {
                 $email = $user->email;
-                $code = self::generateCode();
-                $html = self::resetHtml($user->username, $code);
-                if (User::sendVerification($email, "Password Reset", $html)) {
+                $code = self::generateCode(); //generating code
+
+                $html = self::resetHtml($user->username, $code); // html that will be sent
+                if (User::sendVerification($email, "Password Reset", $html)) { //sendig email
                     $_SESSION['resetEmail'] = $email;
                     $_SESSION['code'] = $code;
-                    $load = "pwdReset.html";
+                    $load = "pwdReset.html"; //redirecting to password reset form
                 } else {
                     $parameters['message'] = "Error sendig email";
                 }
@@ -356,6 +365,14 @@ class LoginController
         }
     }
 
+    /**
+     * resetHtml
+     *
+     * this method return the html that should be sent to user´s email
+     * @param  mixed $username
+     * @param  mixed $code
+     * @return void
+     */
     public static function resetHtml($username, $code)
     {
         $html = '<div style = "text-align: center;">';
@@ -368,6 +385,13 @@ class LoginController
         return $html;
     }
 
+
+    /**
+     * generateCode
+     *
+     * this method generates a random 6 digit number
+     * @return void
+     */
     public static function generateCode()
     {
         $code = 0;
@@ -375,5 +399,13 @@ class LoginController
             $code = ($code * 10) + rand(0, 9);
         }
         return $code;
+    }
+
+
+    public static function logout()
+    {
+        session_unset();
+        session_destroy();
+        header("Location:?page=login");
     }
 }
